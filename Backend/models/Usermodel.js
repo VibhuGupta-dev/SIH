@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     contact: {
-      type: String, // Changed to String to match controller
+      type: String,
       required: true,
     },
     isEmailVerified: {
@@ -30,9 +30,13 @@ const userSchema = mongoose.Schema(
       type: Date,
       default: null,
     },
+    hasCompletedAssessment: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
-    timestamps: true, // Automatically handles createdAt and updatedAt
+    timestamps: true,
   }
 );
 

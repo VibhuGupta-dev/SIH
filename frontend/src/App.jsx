@@ -7,6 +7,7 @@ import Form from "./pages/Form.jsx";
 import Dashboard  from "./pages/Dashboard.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Features from "./pages/FeaturePage.jsx";
+import AnonymousChat from "./components/anonymusChat.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/assessment" element={<Form />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/features" element={<Features />} />
+        <Route path="/anonymous-chat" element={<AnonymousChat />} />
       </Routes>
     </Router>
   );

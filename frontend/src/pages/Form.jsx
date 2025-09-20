@@ -11,7 +11,6 @@ export default function MentalHealthQuiz() {
   const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
 
-  // Check assessment status on mount
   useEffect(() => {
     checkAssessmentStatus();
     fetchQuestions();
@@ -19,25 +18,34 @@ export default function MentalHealthQuiz() {
 
   const checkAssessmentStatus = async () => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found. Please log in.');
+      }
+      console.log('Checking assessment status with token:', token);
+
       const response = await fetch('http://localhost:3000/api/usermentalhealth/status', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         credentials: 'include',
       });
 
       const data = await response.json();
+      console.log('Assessment status response:', data);
       if (!response.ok) {
         throw new Error(data.message || 'Failed to check assessment status');
       }
 
       if (data.hasCompletedAssessment) {
-        navigate('/assessment'); // Redirect to assessment if completed
+        navigate('/assessment');
       }
     } catch (err) {
       console.error('Error checking assessment status:', err.message);
       setError('Failed to verify assessment status: ' + err.message);
+      navigate('/signin');
     }
   };
 
@@ -55,7 +63,6 @@ export default function MentalHealthQuiz() {
     }
   };
 
-  // Mental Health Questions (unchanged, 10 questions)
   const getMentalHealthQuestions = () => [
     {
       id: 1,
@@ -69,107 +76,104 @@ export default function MentalHealthQuiz() {
       ],
     },
     {
-    id: 2,
-    question: "How well have you been sleeping recently?",
-    options: [
-      { value: "a", text: "Sleeping very well, feeling rested" },
-      { value: "b", text: "Mostly good sleep with minor issues" },
-      { value: "c", text: "Average sleep, sometimes restless" },
-      { value: "d", text: "Frequent difficulty falling or staying asleep" },
-      { value: "e", text: "Severe sleep problems or insomnia" },
-    ],
-  },
-  {
-    id: 3,
-    question: "How often do you feel anxious or worried?",
-    options: [
-      { value: "a", text: "Rarely or never" },
-      { value: "b", text: "Occasionally, but manageable" },
-      { value: "c", text: "Sometimes, moderate level" },
-      { value: "d", text: "Often, causes noticeable distress" },
-      { value: "e", text: "Almost constantly, overwhelming" },
-    ],
-  },
-  {
-    id: 4,
-    question: "How is your energy level throughout the day?",
-    options: [
-      { value: "a", text: "High energy, feeling motivated" },
-      { value: "b", text: "Good energy most of the time" },
-      { value: "c", text: "Variable energy, some ups and downs" },
-      { value: "d", text: "Often tired or lacking motivation" },
-      { value: "e", text: "Consistently low energy or exhausted" },
-    ],
-  },
-  {
-    id: 5,
-    question: "How well are you able to concentrate and focus?",
-    options: [
-      { value: "a", text: "Excellent focus and concentration" },
-      { value: "b", text: "Generally good, minor distractions" },
-      { value: "c", text: "Moderate focus, sometimes scattered" },
-      { value: "d", text: "Difficulty concentrating frequently" },
-      { value: "e", text: "Very poor concentration most of the time" },
-    ],
-  },
-  {
-    id: 6,
-    question: "How satisfied are you with your relationships?",
-    options: [
-      { value: "a", text: "Very satisfied, strong connections" },
-      { value: "b", text: "Mostly satisfied with some relationships" },
-      { value: "c", text: "Mixed feelings about relationships" },
-      { value: "d", text: "Often feel disconnected or lonely" },
-      { value: "e", text: "Very isolated or unsatisfied with relationships" },
-    ],
-  },
-  {
-    id: 7,
-    question: "How do you typically handle stress?",
-    options: [
-      { value: "a", text: "Very effective coping strategies" },
-      { value: "b", text: "Usually manage stress well" },
-      { value: "c", text: "Sometimes struggle but get by" },
-      { value: "d", text: "Often feel overwhelmed by stress" },
-      { value: "e", text: "Stress feels unmanageable most of the time" },
-    ],
-  },
-  {
-    id: 8,
-    question: "How often do you engage in activities you enjoy?",
-    options: [
-      { value: "a", text: "Regularly, several times a week" },
-      { value: "b", text: "Fairly often, when I have time" },
-      { value: "c", text: "Occasionally, when motivated" },
-      { value: "d", text: "Rarely, lost interest in many things" },
-      { value: "e", text: "Almost never, don't enjoy much anymore" },
-    ],
-  },
-  {
-    id: 9,
-    question: "How do you feel about your self-worth and confidence?",
-    options: [
-      { value: "a", text: "Very confident and positive self-image" },
-      { value: "b", text: "Generally good self-esteem" },
-      { value: "c", text: "Average confidence, varies by situation" },
-      { value: "d", text: "Often doubt myself or feel inadequate" },
-      { value: "e", text: "Very low self-worth or self-criticism" },
-    ],
-  },
-  {
-    id: 10,
-    question: "How well are you taking care of your physical health?",
-    options: [
-      { value: "a", text: "Excellent self-care and healthy habits" },
-      { value: "b", text: "Generally good care of myself" },
-      { value: "c", text: "Inconsistent but trying" },
-      { value: "d", text: "Neglecting health needs frequently" },
-      { value: "e", text: "Very poor self-care or neglect" },
-    ],
-  },
-
- 
-    // ... (other 9 questions as previously shared)
+      id: 2,
+      question: "How well have you been sleeping recently?",
+      options: [
+        { value: "a", text: "Sleeping very well, feeling rested" },
+        { value: "b", text: "Mostly good sleep with minor issues" },
+        { value: "c", text: "Average sleep, sometimes restless" },
+        { value: "d", text: "Frequent difficulty falling or staying asleep" },
+        { value: "e", text: "Severe sleep problems or insomnia" },
+      ],
+    },
+    {
+      id: 3,
+      question: "How often do you feel anxious or worried?",
+      options: [
+        { value: "a", text: "Rarely or never" },
+        { value: "b", text: "Occasionally, but manageable" },
+        { value: "c", text: "Sometimes, moderate level" },
+        { value: "d", text: "Often, causes noticeable distress" },
+        { value: "e", text: "Almost constantly, overwhelming" },
+      ],
+    },
+    {
+      id: 4,
+      question: "How is your energy level throughout the day?",
+      options: [
+        { value: "a", text: "High energy, feeling motivated" },
+        { value: "b", text: "Good energy most of the time" },
+        { value: "c", text: "Variable energy, some ups and downs" },
+        { value: "d", text: "Often tired or lacking motivation" },
+        { value: "e", text: "Consistently low energy or exhausted" },
+      ],
+    },
+    {
+      id: 5,
+      question: "How well are you able to concentrate and focus?",
+      options: [
+        { value: "a", text: "Excellent focus and concentration" },
+        { value: "b", text: "Generally good, minor distractions" },
+        { value: "c", text: "Moderate focus, sometimes scattered" },
+        { value: "d", text: "Difficulty concentrating frequently" },
+        { value: "e", text: "Very poor concentration most of the time" },
+      ],
+    },
+    {
+      id: 6,
+      question: "How satisfied are you with your relationships?",
+      options: [
+        { value: "a", text: "Very satisfied, strong connections" },
+        { value: "b", text: "Mostly satisfied with some relationships" },
+        { value: "c", text: "Mixed feelings about relationships" },
+        { value: "d", text: "Often feel disconnected or lonely" },
+        { value: "e", text: "Very isolated or unsatisfied with relationships" },
+      ],
+    },
+    {
+      id: 7,
+      question: "How do you typically handle stress?",
+      options: [
+        { value: "a", text: "Very effective coping strategies" },
+        { value: "b", text: "Usually manage stress well" },
+        { value: "c", text: "Sometimes struggle but get by" },
+        { value: "d", text: "Often feel overwhelmed by stress" },
+        { value: "e", text: "Stress feels unmanageable most of the time" },
+      ],
+    },
+    {
+      id: 8,
+      question: "How often do you engage in activities you enjoy?",
+      options: [
+        { value: "a", text: "Regularly, several times a week" },
+        { value: "b", text: "Fairly often, when I have time" },
+        { value: "c", text: "Occasionally, when motivated" },
+        { value: "d", text: "Rarely, lost interest in many things" },
+        { value: "e", text: "Almost never, don't enjoy much anymore" },
+      ],
+    },
+    {
+      id: 9,
+      question: "How do you feel about your self-worth and confidence?",
+      options: [
+        { value: "a", text: "Very confident and positive self-image" },
+        { value: "b", text: "Generally good self-esteem" },
+        { value: "c", text: "Average confidence, varies by situation" },
+        { value: "d", text: "Often doubt myself or feel inadequate" },
+        { value: "e", text: "Very low self-worth or self-criticism" },
+      ],
+    },
+    {
+      id: 10,
+      question: "How well are you taking care of your physical health?",
+      options: [
+        { value: "a", text: "Excellent self-care and healthy habits" },
+        { value: "b", text: "Generally good care of myself" },
+        { value: "c", text: "Inconsistent but trying" },
+        { value: "d", text: "Neglecting health needs frequently" },
+        { value: "e", text: "Very poor self-care or neglect" },
+      ],
+    },
   ];
 
   const handleAnswerSelect = (value) => {
@@ -205,20 +209,31 @@ export default function MentalHealthQuiz() {
         return;
       }
 
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found. Please log in.');
+      }
+      console.log('Fetching user profile with token:', token);
+
       const profileResponse = await fetch('http://localhost:3000/api/auth/me', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         credentials: 'include',
       });
 
       const profileData = await profileResponse.json();
+      console.log('Profile response:', profileData);
       if (!profileResponse.ok) {
         throw new Error(profileData.message || 'Failed to fetch user profile');
       }
 
-      const userId = profileData.user.id;
+      const userId = profileData.user.userId;
+      if (!userId) {
+        throw new Error('User ID not found in profile response');
+      }
       console.log('Fetched userId:', userId);
 
       const formattedAnswers = questions.map((question, index) => {
@@ -251,6 +266,7 @@ export default function MentalHealthQuiz() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         credentials: 'include',
         body: JSON.stringify(payload),
@@ -372,7 +388,6 @@ export default function MentalHealthQuiz() {
   );
 }
 
-// Loading, Error, and Results Screens (unchanged)
 const LoadingScreen = () => (
   <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 flex items-center justify-center">
     <div className="text-center">
@@ -419,101 +434,96 @@ const ResultsScreen = () => {
   );
 };
 
-// Custom CSS (unchanged)
-// Custom CSS remains unchanged
+<style>{`
+  @keyframes gentleFloat {
+    0%, 100% {
+      transform: translateY(0px) translateX(0px) rotate(0deg);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translateY(-20px) translateX(10px) rotate(180deg);
+      opacity: 0.4;
+    }
+  }
 
-      {/* Custom CSS for mental health theme */}
-      <style>{`
-        @keyframes gentleFloat {
-          0%, 100% {
-            transform: translateY(0px) translateX(0px) rotate(0deg);
-            opacity: 0.2;
-          }
-          50% {
-            transform: translateY(-20px) translateX(10px) rotate(180deg);
-            opacity: 0.4;
-          }
-        }
+  @keyframes gentleWave {
+    0%, 100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 0.1;
+    }
+    50% {
+      transform: scale(1.1) rotate(90deg);
+      opacity: 0.2;
+    }
+  }
 
-        @keyframes gentleWave {
-          0%, 100% {
-            transform: scale(1) rotate(0deg);
-            opacity: 0.1;
-          }
-          50% {
-            transform: scale(1.1) rotate(90deg);
-            opacity: 0.2;
-          }
-        }
+  @keyframes gentleSway {
+    0%, 100% {
+      transform: rotate(-5deg) translateY(0px);
+      opacity: 0.3;
+    }
+    50% {
+      transform: rotate(5deg) translateY(-10px);
+      opacity: 0.6;
+    }
+  }
 
-        @keyframes gentleSway {
-          0%, 100% {
-            transform: rotate(-5deg) translateY(0px);
-            opacity: 0.3;
-          }
-          50% {
-            transform: rotate(5deg) translateY(-10px);
-            opacity: 0.6;
-          }
-        }
+  .mental-progress-bar {
+    background: linear-gradient(90deg, #14B8A6, #0D9488, #059669);
+    box-shadow: 0 2px 8px -2px rgba(20, 184, 166, 0.3);
+  }
 
-        .mental-progress-bar {
-          background: linear-gradient(90deg, #14B8A6, #0D9488, #059669);
-          box-shadow: 0 2px 8px -2px rgba(20, 184, 166, 0.3);
-        }
+  .mental-option {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
 
-        .mental-option {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-        }
+  .mental-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.1), transparent);
+    transition: left 0.6s ease;
+  }
 
-        .mental-option::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.1), transparent);
-          transition: left 0.6s ease;
-        }
+  .mental-option:hover::before {
+    left: 100%;
+  }
 
-        .mental-option:hover::before {
-          left: 100%;
-        }
+  .mental-option:hover {
+    transform: translateY(-2px);
+  }
 
-        .mental-option:hover {
-          transform: translateY(-2px);
-        }
+  .mental-option-selected {
+    transform: translateY(-1px);
+    animation: gentleGlow 3s ease-in-out infinite;
+  }
 
-        .mental-option-selected {
-          transform: translateY(-1px);
-          animation: gentleGlow 3s ease-in-out infinite;
-        }
+  @keyframes gentleGlow {
+    0%, 100% {
+      box-shadow: 0 4px 12px -2px rgba(20, 184, 166, 0.2);
+    }
+    50% {
+      box-shadow: 0 6px 16px -2px rgba(20, 184, 166, 0.3);
+    }
+  }
 
-        @keyframes gentleGlow {
-          0%, 100% {
-            box-shadow: 0 4px 12px -2px rgba(20, 184, 166, 0.2);
-          }
-          50% {
-            box-shadow: 0 6px 16px -2px rgba(20, 184, 166, 0.3);
-          }
-        }
+  .mental-card {
+    animation: cardSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-        .mental-card {
-          animation: cardSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes cardSlideIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-   
+  @keyframes cardSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`}</style>
