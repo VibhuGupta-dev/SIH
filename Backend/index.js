@@ -9,6 +9,8 @@ import { Server } from 'socket.io';
 import http from 'http';
 import jwt from 'jsonwebtoken';
 import Report from './models/Report.js';
+import motivationalRoutes from './routes/Motivationalroutes.js';
+import communityRoutes from './routes/ComunityRoute.js';
 
 dotenv.config();
 
@@ -39,7 +41,8 @@ app.use(
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/usermentalhealth', userinterestRoutes);
-
+app.use('/api/motivational-program', motivationalRoutes);
+app.use('/api/community', communityRoutes);
 // Socket.IO Logic for Anonymous Chat
 let waitingUsers = [];
 

@@ -8,6 +8,9 @@ import Dashboard  from "./pages/Dashboard.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Features from "./pages/FeaturePage.jsx";
 import AnonymousChat from "./components/anonymusChat.jsx";
+import MotivationalProgram from "./components/YoutubeVideo.jsx";
+import Community from "./components/Comunity.jsx";
+
 
 function App() {
   return (
@@ -21,6 +24,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/features" element={<Features />} />
         <Route path="/anonymous-chat" element={<AnonymousChat />} />
+        <Route path="/motivational-program" element={<MotivationalProgram />} />
+        <Route path="/community" element={<Community />} />
       </Routes>
     </Router>
   );
