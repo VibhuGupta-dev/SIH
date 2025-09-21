@@ -17,6 +17,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-b from-teal-50 via-blue-50 to-gray-100 text-gray-800">
       <Navbar />
 
+      {/* Waves + floating bubbles */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <style>{`
           .wave-layer {
@@ -68,7 +69,9 @@ export default function Home() {
         ))}
       </div>
 
+      {/* Hero Section */}
       <section className="relative z-10 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 py-20 md:py-32 flex-grow">
+        {/* Text Content */}
         <motion.div
           className="flex-1 flex flex-col items-center md:items-start text-center md:text-left space-y-6 max-w-xl"
           initial="hidden"
@@ -92,13 +95,14 @@ export default function Home() {
           </motion.h2>
 
           <motion.p
-            className="text-gray-600 text-lg md:text-xl"
+            className="text-gray-600 text-lg md:text-xl max-w-md mx-auto md:mx-0"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
             Discover personalized mental health support with AI-driven insights and tools for emotional well-being.
           </motion.p>
 
-          <div className="flex gap-4 mt-4">
+          {/* Buttons Centered on Mobile, Left on Desktop */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center md:justify-start">
             <FloatingButton onClick={() => navigate("/signin")}>
               Get Started <ArrowRight size={20} />
             </FloatingButton>
@@ -108,22 +112,26 @@ export default function Home() {
           </div>
         </motion.div>
 
+        {/* Spline Illustration */}
         <motion.div
           className="flex-1 flex justify-center md:justify-end mt-10 md:mt-0"
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
         >
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png"
-            alt="Mindfulness Illustration"
-            className="w-64 md:w-80 lg:w-96"
-            loading="lazy"
+          <iframe
+            src="https://my.spline.design/genkubgreetingrobot-IQuIElqHtJ4NybwhcbylPDpw/"
+            frameBorder="0"
+            width="100%"
+            height="500px"
+            className="w-72 md:w-96 lg:w-[500px] rounded-xl shadow-xl"
+            title="Spline 3D Illustration"
           />
         </motion.div>
       </section>
 
-      <footer className="mt-auto py-6 bg-teal-900/20 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} HelloMind. All rights reserved.
+      {/* Footer aligned at bottom */}
+      <footer className="w-full py-6 bg-teal-900/20 text-center text-gray-600 text-sm mt-auto">
+        © {new Date().getFullYear()} <span className="font-semibold">HelloMind</span>. All rights reserved.
       </footer>
     </div>
   );

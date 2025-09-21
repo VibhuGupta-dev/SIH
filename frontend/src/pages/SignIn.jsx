@@ -127,7 +127,7 @@ export default function SignIn() {
               />
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <FloatingButton type="submit" disabled={loading}>
-                {loading ? "Signing In..." : "Sign In"} <ArrowRight size={20} />
+                {loading ? "Signing In..." : "Sign  In"} <ArrowRight size={20} />
               </FloatingButton>
             </form>
             <motion.p
