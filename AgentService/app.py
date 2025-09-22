@@ -15,7 +15,8 @@ from time import sleep
 app = Flask(__name__)
 
 # Configure CORS to allow requests from frontend
-CORS(app, origins=['http://localhost:5174'], supports_credentials=True)
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5174")
+CORS(app, origins=[frontend_url], supports_credentials=True)
 
 # Configure rate limiter
 limiter = Limiter(
