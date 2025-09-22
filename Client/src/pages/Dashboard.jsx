@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import FloatingButton from '../components/FloatingButton';
+import FloatingButton from "../components/floatingButton";
 
 const messageVariants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },

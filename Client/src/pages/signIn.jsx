@@ -1,50 +1,57 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import Navbar from "../components/navbar";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../components/NavBar";
-import FloatingButton from "../components/FloatingButton";
+import FloatingButton from "../components/floatingButton";
 
 const heroText = {
   hidden: { opacity: 0, y: 50 },
   show: { opacity: 1, y: 0, transition: { duration: 1, ease: "easeOut" } },
 };
 
-export default function OtpVerification() {
+export default function SignIn() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [otp, setOtp] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const email = location.state?.email || "";
-
-  const handleVerifyOtp = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/auth/verify-registration-otp`,
-        { email, otp },
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+        { email, password },
         { withCredentials: true }
       );
 
-      console.log("OTP verification response:", res.data);
+      console.log("Login success:", res.data);
 
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
-        navigate("/assessment");
+        if (res.data.user.hasCompletedAssessment) {
+          navigate("/assessment");
+        } else {
+          navigate("/Features");
+        }
       } else {
-        setError(res.data.message || "OTP verification failed");
+        setError(res.data.message || "Login failed");
       }
     } catch (err) {
-      console.error("OTP verification error:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "OTP verification failed");
+      console.error("Login error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Login failed, try again");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSignUpRedirect = () => {
+    navigate("/signup");
   };
 
   return (
@@ -83,28 +90,60 @@ export default function OtpVerification() {
           <motion.h2
             className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-400 to-blue-500 text-transparent bg-clip-text"
             style={{ fontFamily: "Inter, sans-serif", fontWeight: 700 }}
+            animate={{ rotateY: [0, 5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
           >
-            Verify OTP
+            Sign In to HelloMind
           </motion.h2>
+          <motion.p
+            className="text-lg md:text-xl text-gray-600"
+            style={{ fontFamily: "Inter, sans-serif" }}
+            variants={heroText}
+          >
+            Access your personalized mental wellness journey
+          </motion.p>
           <motion.div
             className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 border border-teal-200/50"
             variants={heroText}
           >
-            <form className="space-y-4" onSubmit={handleVerifyOtp}>
+            <form className="space-y-4" onSubmit={handleSignIn}>
               <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="Enter OTP"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
                 className="w-full px-4 py-2 bg-white/50 text-gray-800 rounded-lg border border-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-400"
                 required
-                aria-label="OTP"
+                aria-label="Email"
+              />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="w-full px-4 py-2 bg-white/50 text-gray-800 rounded-lg border border-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                required
+                aria-label="Password"
               />
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <FloatingButton type="submit" disabled={loading}>
-                {loading ? "Verifying..." : "Verify OTP"}
+                {loading ? "Signing In..." : "Sign  In"} <ArrowRight size={20} />
               </FloatingButton>
             </form>
+            <motion.p
+              className="text-sm text-gray-500 mt-4"
+              style={{ fontFamily: "Inter, sans-serif" }}
+              variants={heroText}
+            >
+              Don't have an account?{" "}
+              <button
+                onClick={handleSignUpRedirect}
+                className="text-teal-500 hover:underline focus:outline-none"
+                aria-label="Sign Up"
+              >
+                Sign Up
+              </button>
+            </motion.p>
           </motion.div>
         </motion.div>
       </section>

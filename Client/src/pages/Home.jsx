@@ -1,9 +1,8 @@
-import React from "react";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/navbar";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import FloatingButton from "../components/FloatingButton";
+import FloatingButton from "../components/floatingButton";
 
 const heroVariants = {
   hidden: { opacity: 0, y: 50 },

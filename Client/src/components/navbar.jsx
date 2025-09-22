@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import FloatingButton from "./FloatingButton";
+import FloatingButton from "./floatingButton";
 
 const logoVariants = {
   hidden: { opacity: 0, y: -20, rotateX: -30 },

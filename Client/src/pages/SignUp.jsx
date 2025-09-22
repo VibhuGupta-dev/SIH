@@ -3,8 +3,8 @@ import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
-import Navbar from "../components/NavBar";
-import FloatingButton from "../components/FloatingButton";
+import Navbar from "../components/navbar";
+import FloatingButton from "../components/floatingButton";
 
 const heroText = {
   hidden: { opacity: 0, y: 50 },
